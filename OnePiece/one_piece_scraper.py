@@ -1,6 +1,6 @@
 #! python3
 
-import sys, webbrowser, requests, re, math
+import sys, webbrowser, requests, re, math, os
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
@@ -26,7 +26,8 @@ if __name__ == '__main__':
 			res = requests.get(DN_STR+links[index]['href'], stream = True)
 			total_size = int(res.headers.get('content-length', 0))
 			bytes_written = 0
+			file_path = os.path.join(os.getcwd(), links[index].text)
 			print('Downloading Link : {}'.format(links[index].text))
-			with open('.\{}'.format(links[index].text), 'wb') as f_ep:
+			with open(file_path, 'wb') as f_ep:
 				for data in tqdm(res.iter_content(BLOCK_SIZE), total = math.ceil(total_size / BLOCK_SIZE) , unit = 'KB', unit_scale = True):
 					bytes_written += f_ep.write(data)
